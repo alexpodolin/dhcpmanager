@@ -20,3 +20,5 @@ include/
 include/*
 
 env/
+
+app/__pycache__/

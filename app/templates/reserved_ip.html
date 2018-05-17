@@ -1,0 +1,86 @@
+<!-- header -->
+{% extends 'base.html' %}
+{%- block title -%} Зарезервированные ip адреса {%- endblock -%}
+
+<!-- menu -->
+{% set active_page = 'reserved_ip' %}
+
+<!-- форма слева -->
+{% block content_form %}
+<form class="form-control config" method="POST" autocomplete="on">
+	<fieldset>
+		<legend>Зарезервировать ip адрес</legend>	
+
+		<div class="form-group">
+			<label for="ip_addr">ip адрес:</label>
+			<input class="form-control" type="text" id="ip_addr" name="ip_addr" maxlength="15" required placeholder="ip адрес устройства">
+		</div>
+
+		<div class="form-group">
+			<label for="mac_addr">mac адрес:</label>
+			<input class="form-control" type="text" id="mac_addr" name="mac_addr" maxlength="17" required size="17" placeholder="mac адрес устройства">
+		</div>					
+
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-block" name="int__add_config">Добавить ip адрес</button>
+		</div>
+	</fieldset>
+</form>
+{% endblock %}
+
+
+<!-- таблица результатов -->
+{% block table_result %}
+<p>Зарезервированые ip адреса</p>
+<table class="table table-responsive" id="subnets_content">		
+	<thead class="text-nowrap">		
+		<tr>			
+			<th>id</th>
+			<th>Имя устройства</th>
+			<th>mac adress</th>
+			<th>ip адрес</th>
+			<th>Действия</th>
+		</tr>
+	</thead>
+	<tr>
+		<td>17</td>
+		<td>ipanel-4926</td>
+		<td>B8:27:EB:72:E6:A3</td>
+		<td>10.130.48.84</td>					
+
+		<td>
+			<a href="#" class="action__icon btn" title="редактировать">
+				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
+			</a>
+
+			<a href="#" class="action__icon btn" title="удалить">
+				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
+			</a>
+		</td>						
+	</tr>										
+</table>
+{% endblock %}
+		
+		
+<!-- всплывающее окно -->
+{% block popup_window %}
+<div id="remove__ip" class="modal remove__ip" tabindex="-1">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title">Удаление ip адреса</h4>
+			<button type="button" class="close" onclick="close_modal_delete();">×</button>
+		</div>
+
+		<div class="modal-body">Удалить ip адрес ?</div>
+		
+		<div class="modal-footer">			
+			<button type="button" class="btn btn-default" onclick="remove_row();">Да</button>		
+			<button type="button" class="btn btn-danger" onclick="close_modal_delete();">Нет</button>						
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="progress__spin"></div>
+{% endblock %}

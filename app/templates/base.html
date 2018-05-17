@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% block head %}
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="сервер управления dhcpd">
+	<meta name="author" content="alex.podolin@gmail.com">
+	<style media="all,print,screen"></style>
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" >
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" >	
+	
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}" media="all">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" media="all">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" media="all">
+
+	<!--[if it IE]>
+          <script type="text/javascript" src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/js.js') }}"></script>
+    {% endblock %}
+</head>
+
+<body>
+<div class="container-fluid ">
+	<div class="row-fluid wrapper">
+	
+		{% set nav_bar = [
+		    ('/', 'index', 'Доступные подсети'),
+			('/hosts_allow', 'hosts_allow', 'Доступные устройства'),
+			('/reserved_ip', 'reserved_ip', 'Зарезервированные ip-адреса'),
+		] -%}
+		
+		{% set active_page = active_page|default('index') -%}			
+
+		<ul class="nav nav-tabs sats-nav">
+			{% for href, id, caption in nav_bar %}
+				<li class="nav-item">
+					<a {% if id == active_page %} class="nav-link active" {% endif %} class="nav-link" href="{{ href|e }}">{{ caption|e }}</a>
+				</li>
+			{% endfor %}		   
+		</ul>		
+		
+		<div class="row col-lg-3 col-md-5 col-sm-12 col-xs-12 form_block">
+		{% block content_form %}
+		{% endblock %}
+		</div>	
+
+		<div class="row col-lg-9 col-md-7 col-sm-12 col-xs-12 wrapper">
+		{% block table_result %}
+		{% endblock %}
+		</div>
+		
+		{% block popup_window %}
+		{% endblock %}
+		
+	</div>	
+</div>
+</body>
+</html>
