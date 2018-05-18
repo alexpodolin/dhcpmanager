@@ -19,6 +19,10 @@ local/*
 include/
 include/*
 
-env/
+venv/
 
 app/__pycache__/
+
+conf/
+
+markup/
