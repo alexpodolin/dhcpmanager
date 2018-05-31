@@ -29,9 +29,6 @@ class Net_ipv4(db.Model):
 	    super(Net_ipv4, self).__init__(*args, **kwargs)
 		
 	def __repr__(self):
-	    return '<Net_ipv4 id: {}, interface: {}, subnet_ipv4: {}, netmask: {}, default_gw: {}, broadcast: {}, \
-                          ip_range_start: {}, ip_range_end: {}, failover_peer: {}, opt_242: {} >'.format( \
-						  self.id, self.interface, self.subnet_ipv4, self.netmask, self.default_gw, self.broadcast, \
-						  self.ip_range_start, self.ip_range_end, self.failover_peer, self.opt_242)
+	    return '<Net_ipv4 id: {}, interface: {}, subnet_ipv4: {}, netmask: {}, default_gw: {}, broadcast: {}, ip_range_start: {}, ip_range_end: {}, failover_peer: {}, opt_242: {} >'.format(self.id, self.interface, self.subnet_ipv4, self.netmask, self.default_gw, self.broadcast, self.ip_range_start, self.ip_range_end, self.failover_peer, self.opt_242)
 		
 		
