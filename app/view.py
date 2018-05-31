@@ -1,6 +1,13 @@
+# -*- coding: utf-8 -*-
+# view отвечает за отображение данных ч.з шаблоны
+
+# импортируем наше приложение (переменную) для получения запросов от юзера
 from app import app
+
+# render_template - ф-ия котороя занимается обработкой содержимого шаблонов
 from flask import render_template
 
+# обращаемся к экземпляру класса flask и методу route
 @app.route('/')
 def index() -> 'html':
     return render_template('index.html')
