@@ -9,14 +9,14 @@
 
 <!-- форма слева -->
 {% block content_form %}
-<form class="form-control config" method="POST" autocomplete="on">
+<form class="form-control config" method="GET" autocomplete="on">
 	<fieldset>
 		<legend>Настройки конфига подсети</legend>
 		<small>* если в списке не отображаются нужный vlan, то необходимо его создать на всех серверах</small>
 
 		<div class="form-group">
 			<label for="choose_interface">Выберите интерфейс:</label>
-			<select id="choose_interface" name="choose_interface" class="form-control" required>
+			<select id="choose_interface" class="form-control" name="choose_interface" value="{{ request.args.get('choose_interface', '') }}" required>
 				<option value="">---</option>
 				<option value="203">203</option>
 			</select>
@@ -24,43 +24,43 @@
 
 		<div class="form-group">
 			<label for="subnet">Адрес подсети:</label>
-			<input class="form-control" type="text" id="subnet" name="subnet" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="адрес подсети">
+			<input class="form-control" type="text" id="subnet" name="subnet" value="{{ request.args.get('subnet', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="адрес подсети">
 		</div>
 
 		<div class="form-group">
 			<label for="netmask">Маска подсети:</label>
-			<input class="form-control" type="text" id="netmask" name="netmask" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="маска подсети">
+			<input class="form-control" type="text" id="netmask" name="netmask" value="{{ request.args.get('netmask', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="маска подсети">
 		</div>
 
 		<div class="form-group">
 			<label for="gw">Шлюз по умолчанию:</label>
-			<input class="form-control" type="text" id="gw" name="gw" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="шлюз по умолчанию">
+			<input class="form-control" type="text" id="gw" name="gw" value="{{ request.args.get('gw', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="шлюз по умолчанию">
 		</div>
 
 		<div class="form-group">
 			<label for="broadcast">Укажите broadcast:</label>
-			<input class="form-control" type="text" id="broadcast" name="broadcast" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="широковещательный адрес">
+			<input class="form-control" type="text" id="broadcast" name="broadcast" value="{{ request.args.get('broadcast', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="широковещательный адрес">
 		</div>
 
 		<div class="form-group">
 			<label for="ip_start">Начальный адрес:</label>
-			<input class="form-control" type="text" id="ip_start" name="ip_start" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="начальный адрес диапазона">
+			<input class="form-control" type="text" id="ip_start" name="ip_start" value="{{ request.args.get('ip_start', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="начальный адрес диапазона">
 		</div>
 
 		<div class="form-group">
 			<label for="ip_end">Конечный адрес:</label>
-			<input class="form-control" type="text" id="ip_end" name="ip_end" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="конечный адрес диапазона">
+			<input class="form-control" type="text" id="ip_end" name="ip_end" value="{{ request.args.get('ip_end', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="конечный адрес диапазона">
 		</div>
 
 		<div class="form-group">
 			<label for="failover_peer">failover peer:</label>
-			<input class="form-control" type="text" id="failover_peer" name="failover_peer"  required size="30" value="nr-dhcpd-failover">
+			<input class="form-control" type="text" id="failover_peer" name="failover_peer" value="{{ request.args.get('failover_peer', '') }}"  required size="30" value="nr-dhcpd-failover">
 		</div>
 
 		<div class="form-group">
 			<label for="opt_242">опция 242:</label>
 			<small>* укажите параметр L2QVLAN</small>
-			<input class="form-control" type="text" id="opt_242" name="opt_242"  required size="150" value="MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0">
+			<input class="form-control" type="text" id="opt_242" name="opt_242" value="{{ request.args.get('opt_242', '') }}"  required size="150" value="MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0">
 		</div>
 
 		<div class="form-group">
@@ -74,45 +74,52 @@
 {% block table_result %}
 <p>Сконфигурированные подсети и vlan</p>
 <table class="table table-responsive" id="subnets_content">		
-	<thead class="text-nowrap">		
-		<tr>			
-			<th>Interface</th>
-			<th>Subnet</th>
-			<th>Netmask</th>
-			<th>Default Gateway</th>
-			<th>Broadcast</th>
-			<th>Start ip</th>
-			<th>End ip</th>
-			<th>Failover peer</th>
-			<th>Option 242</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
+    <thead class="text-nowrap">		
+        <tr>			
+            <th>Интерфейс</th>
+    			 <th>ip подсети</th>
+    		    <th>Маска подсети</th>
+    			 <th>Шлюз подсети</th>
+    			 <th>Broadcast</th>
+    			 <th>Начальный ip</th>
+    			 <th>Конечный ip</th>
+    			 <th>Failover peer</th>
+    			 <th>Опция 242</th>
+    			 <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
 			
-		</tr>					
-	</tbody>
-	<tr>
-		<td>enp4s0f0.203</td>
-		<td>10.16.234.0</td>
-		<td>255.255.255.248</td>
-		<td>10.16.234.1</td>
-		<td>10.16.234.7</td>
-		<td>10.16.234.4</td>
-		<td>10.16.234.6</td>
-		<td>nr-dhcpd-failover</td>
-		<td>MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=203,VLANTEST=0</td>
-		<td>
-			<a href="#" class="action__icon btn" title="редактировать">
-				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
-			</a>
+    		</tr>					
+    </tbody>
+	
+    <tr>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.interface }}</td>
+                <td>{{ item.subnet_ipv4 }}</td>
+                <td>{{ item.netmask }}</td>
+                <td>{{ item.default_gw }}</td>
+                <td>{{ item.broadcast }}</td>
+                <td>{{ item.ip_range_start }}</td>
+                <td>{{ item.ip_range_end }}</td>
+                <td>{{ item.failover_peer }}</td>
+                <td>{{ item.opt_242 }}</td>                
+                <td>
+            			<a href="#" class="action__icon btn" title="редактировать">
+            				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
+            			</a>
 
-			<a href="#" class="action__icon btn" data-toggle="modal" data-target="remove__subnet" title="удалить" row-id="4" onclick=show_modal_delete(this);>
-				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
-			</a>
-		</td>						
-	</tr>										
+            			<a href="#" class="action__icon btn" data-toggle="modal" \
+                			data-target="remove__subnet" title="удалить" \
+                			row-id="4" onclick=show_modal_delete(this);>
+            				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
+            			</a>
+            		</td>
+            </tr>
+        {% endfor %}
+    </tr>										
 </table>
 {% endblock %}
 

@@ -9,7 +9,7 @@
 
 <!-- форма слева -->
 {% block content_form %}
-<form class="form-control config" method="POST" autocomplete="on">
+<form class="form-control config" method="GET" autocomplete="on">
 	<fieldset>
 		<legend>Добавить устройство</legend>	
 
@@ -43,21 +43,27 @@
 			<th>Действия</th>
 		</tr>
 	</thead>
+	
 	<tr>
-		<td>5031</td>
-		<td>ipanel-4962</td>
-		<td>a4:78:86:bb:47:ff</td>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.hostname }}</td>
+                <td>{{ item.mac_addr | upper }}</td>              
+                <td>
+            			<a href="#" class="action__icon btn" title="редактировать">
+            				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
+            			</a>
 
-		<td>
-			<a href="#" class="action__icon btn" title="редактировать">
-				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
-			</a>
-
-			<a href="#" class="action__icon btn" title="удалить">
-				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
-			</a>
-		</td>						
-	</tr>										
+            			<a href="#" class="action__icon btn" data-toggle="modal" \
+                			data-target="remove__subnet" title="удалить" \
+                			row-id="4" onclick=show_modal_delete(this);>
+            				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
+            			</a>
+            		</td>
+            </tr>
+        {% endfor %}
+    </tr>									
 </table>
 {% endblock %}
 		
