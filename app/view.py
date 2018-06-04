@@ -7,6 +7,7 @@ from app import app
 # render_template - ф-ия котороя занимается обработкой содержимого шаблонов
 from flask import render_template
 
+<<<<<<< HEAD
 # подключим модели
 from models import NetIpv4, HostsAllow, ReservedIpv4
 
@@ -15,6 +16,12 @@ from models import NetIpv4, HostsAllow, ReservedIpv4
 def index() -> 'html':   
     items=NetIpv4.query.all()
     return render_template('index.html', items=items)
+=======
+# обращаемся к экземпляру класса flask и методу route
+@app.route('/')
+def index() -> 'html':
+    return render_template('index.html')
+>>>>>>> b112296601b74f2f2e19e829e30ebf99975e475f
 
 
 @app.route('/hosts_allow', methods=['GET', 'POST'])
