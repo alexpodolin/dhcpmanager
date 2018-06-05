@@ -16,7 +16,6 @@ from app import db
 класс котоый отвечает за хранение инф. о настройках конфигурации
 dhcpd сервера. Он наследует свойства от класса Model SQLAlchemy
 '''
-
 class NetIpv4(db.Model):
     # таблица настроек которые раздает dhcp сервер
     id = db.Column(db.SmallInteger(), primary_key=True, autoincrement=True)

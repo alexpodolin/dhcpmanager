@@ -1,13 +1,25 @@
 # -*- coding: utf-8 -*-
 # соотношение м.у моделями и формами
-from wtforms import Form, validators, StringField
+from wtforms import Form, validators, SelectField, StringField
+
+# информация о сетевых интерфейсах
+import netifaces
 
 # форма настройки конифгурации подсети
-class AddNetIpv4(Form):
-    server_int = StringField('Выберите интерфейс:',
-                          [validators.InputRequired()], 
-                          render_kw={"placeholder": "---"})
+class AddNetIpv4(Form):  
+    def get_interface_name():        
+        interface_list = netifaces.interfaces()
+        return interface_list    
     
+    server_int = SelectField('Выберите сетвой интерфейс:', )
+        
+
+#    server_int = StringField('Введите сетевой интерфейс:',
+#                          [validators.InputRequired()], 
+#                          render_kw={"placeholder": "server interface",
+#                                     "maxlength": 10,
+#                                     "size": 10})         
+            
     subnet = StringField('Адрес подсети:',
                           [validators.InputRequired()], 
                           render_kw={"placeholder": "subnet ip",
@@ -46,14 +58,14 @@ class AddNetIpv4(Form):
                                        "size": 15})
     failover_peer = StringField('Failover peer:',
                             [validators.InputRequired()],
-                            render_kw={"placeholder": "Failover peer:",
+                            render_kw={"placeholder": "Failover peer",
                                        "pattern": "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
                                        "maxlength": 15,
                                        "size": 15,
                                        "value": "nr-dhcpd-failover"})
     opt_242 = StringField('Опция 242:',
                           [validators.InputRequired()],
-                          render_kw={"placeholder": "option 242",
+                          render_kw={"placeholder": "Option 242",
                                      "size": 150,
                                      "value": "MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0"})
 

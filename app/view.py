@@ -19,8 +19,20 @@ from flask import redirect, url_for
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['POST', 'GET'])
 def index() -> 'html':    
+    # добавление в БД значений из формы
+    if request.method == 'POST':
+        interface = request.form['server_int']
+        net_ipv4 = request.form['subnet']
+        netmask = request.form['netmask']
+        def_gw = request.form['gw']
+        broadcast = request.form['broadcast']
+        ip_start = request.form['ip_start']
+        ip_end = request.form['ip_end']
+        failover_peer = request.form['failover_peer']
+        opt_242 = request.form['opt_242']
+    
     # форма добавления подсетей для dhcp сервера
-    form=AddNetIpv4()   
+    form=AddNetIpv4()     
     # отображение содержимого таблицы БД
     items=NetIpv4.query.all()
     return render_template('index.html', items=items, form=form)
@@ -34,8 +46,7 @@ def hosts_allow() -> 'html':
                                             HostsAllow.mac_addr)
                                         
     return render_template('hosts_allow.html', items=items)
-    '''
-    # добавление значений из формы
+    '''    
     if request.method == 'POST':
         hostname = request.form['hostname']
         mac_addr = request.form['mac_addr']
