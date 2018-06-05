@@ -7,11 +7,11 @@ import netifaces
 
 # форма настройки конифгурации подсети
 class AddNetIpv4(Form):  
-    def get_interface_name():        
-        interface_list = netifaces.interfaces()
-        return interface_list    
+#    def get_interface_name():        
+#        interface_list = netifaces.interfaces()
+#        return interface_list    
     
-    server_int = SelectField('Выберите сетвой интерфейс:', )
+    server_int = SelectField('Выберите сетвой интерфейс:', choices=netifaces.interfaces() )
         
 
 #    server_int = StringField('Введите сетевой интерфейс:',

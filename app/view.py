@@ -15,7 +15,7 @@ from flask import request
 from app import db
 # для редиректа
 from flask import redirect, url_for
-
+import netifaces
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['POST', 'GET'])
 def index() -> 'html':    
@@ -32,7 +32,10 @@ def index() -> 'html':
         opt_242 = request.form['opt_242']
     
     # форма добавления подсетей для dhcp сервера
-    form=AddNetIpv4()     
+    form=AddNetIpv4()   
+    
+    form.server_int.choices = [(server_int, server_int) for server_int in netifaces.interfaces()]
+    
     # отображение содержимого таблицы БД
     items=NetIpv4.query.all()
     return render_template('index.html', items=items, form=form)
