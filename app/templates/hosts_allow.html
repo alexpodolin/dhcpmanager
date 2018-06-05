@@ -12,17 +12,7 @@
 <form class="form-control config" action="{{ url_for('hosts_allow') }}" method="POST" autocomplete="on">
 	<fieldset>
 		<legend>Добавить устройство</legend>	
-{#	
-		<div class="form-group">
-		  <label for="hostname">Имя устройства:</label>
-		  <input class="form-control" type="text" id="hostname" name="hostname" maxlength="20" required placeholder="имя устройства"> 
-     </div>
 
-		<div class="form-group">
-			<label for="mac_addr">mac адрес:</label>
-			<input class="form-control" type="text" id="mac_addr" name="mac_addr" maxlength="17" required size="17" placeholder="mac адрес устройства">
-		</div>					
-#}
      {% for field in form %}
         <div class="form-group">
            {{ field.label(class='control-label') }}
@@ -31,12 +21,11 @@
      {% endfor %}
      
 		<div class="form-group">
-			<button type="submit" class="btn btn-primary btn-block" name="int__add_config">Добавить устройство</button>
+			<button type="submit" class="btn btn-primary btn-block" name="int__add_dev">Добавить устройство</button>
 		</div>
 	</fieldset>
 </form>
 {% endblock %}
-
 
 <!-- таблица результатов -->
 {% block table_result %}
@@ -46,7 +35,7 @@
 		<tr>			
 			<th>id</th>
 			<th>Имя устройства</th>
-			<th>mac adress</th>
+			<th>mac address</th>
 			<th>Действия</th>
 		</tr>
 	</thead>

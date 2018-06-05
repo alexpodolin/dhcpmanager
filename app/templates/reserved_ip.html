@@ -5,24 +5,23 @@
 <!-- menu -->
 {% set active_page = 'reserved_ip' %}
 
+<!-- основное содержимое -->
+
 <!-- форма слева -->
 {% block content_form %}
-<form class="form-control config" method="GET" autocomplete="on">
+<form class="form-control config" action="{{ url_for('reserved_ip') }}" method="POST" autocomplete="on">
 	<fieldset>
 		<legend>Зарезервировать ip адрес</legend>	
 
+     {% for field in form %}
+        <div class="form-group">
+           {{ field.label(class='control-label') }}
+           {{ field(class='form-control') }}
+        </div>     
+     {% endfor %}
+     
 		<div class="form-group">
-			<label for="ip_addr">ip адрес:</label>
-			<input class="form-control" type="text" id="ip_addr" name="ip_addr" maxlength="15" required placeholder="ip адрес устройства">
-		</div>
-
-		<div class="form-group">
-			<label for="mac_addr">mac адрес:</label>
-			<input class="form-control" type="text" id="mac_addr" name="mac_addr" maxlength="17" required size="17" placeholder="mac адрес устройства">
-		</div>					
-
-		<div class="form-group">
-			<button type="submit" class="btn btn-primary btn-block" name="int__add_config">Добавить ip адрес</button>
+			<button type="submit" class="btn btn-primary btn-block" name="int__add_ip">Добавить ip адрес</button>
 		</div>
 	</fieldset>
 </form>
@@ -36,8 +35,8 @@
 		<tr>			
 			<th>id</th>
 			<th>Имя устройства</th>
-			<th>mac adress</th>
 			<th>ip адрес</th>
+			<th>mac address</th>			
 			<th>Действия</th>
 		</tr>
 	</thead>
@@ -46,8 +45,8 @@
             <tr>
                 <td>{{ item.id }}</td>
                 <td>{{ item.hostname }}</td>
-                <td>{{ item.mac_addr | upper }}</td>  
-                <td>{{ item.reserved_ipv4 }}</td>              
+                <td>{{ item.reserved_ipv4 }}</td> 
+                <td>{{ item.mac_addr | upper }}</td>                              
                 <td>
             			<a href="#" class="action__icon btn" title="редактировать">
             				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">

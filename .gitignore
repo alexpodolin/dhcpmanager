@@ -23,4 +23,6 @@ venv/
 
 app/__pycache__
 
+.spyproject
+
 conf/

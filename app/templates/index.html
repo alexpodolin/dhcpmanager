@@ -9,14 +9,15 @@
 
 <!-- форма слева -->
 {% block content_form %}
-<form class="form-control config" method="GET" autocomplete="on">
+                                           {# ф-ия которая отвечает за рендер шаблона #}
+<form class="form-control config" action="{{ url_for('index') }}" method="POST" autocomplete="on">
 	<fieldset>
 		<legend>Настройки конфига подсети</legend>
 		<small>* если в списке не отображаются нужный vlan, то необходимо его создать на всех серверах</small>
-
+{#
 		<div class="form-group">
 			<label for="choose_interface">Выберите интерфейс:</label>
-			<select id="choose_interface" class="form-control" name="choose_interface" value="{{ request.args.get('choose_interface', '') }}" required>
+			<select id="choose_interface" class="form-control" name="choose_interface" required>
 				<option value="">---</option>
 				<option value="203">203</option>
 			</select>
@@ -24,45 +25,52 @@
 
 		<div class="form-group">
 			<label for="subnet">Адрес подсети:</label>
-			<input class="form-control" type="text" id="subnet" name="subnet" value="{{ request.args.get('subnet', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="адрес подсети">
+			<input class="form-control" type="text" id="subnet" name="subnet" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="адрес подсети">
 		</div>
 
 		<div class="form-group">
 			<label for="netmask">Маска подсети:</label>
-			<input class="form-control" type="text" id="netmask" name="netmask" value="{{ request.args.get('netmask', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="маска подсети">
+			<input class="form-control" type="text" id="netmask" name="netmask" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="маска подсети">
 		</div>
 
 		<div class="form-group">
 			<label for="gw">Шлюз по умолчанию:</label>
-			<input class="form-control" type="text" id="gw" name="gw" value="{{ request.args.get('gw', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="шлюз по умолчанию">
+			<input class="form-control" type="text" id="gw" name="gw" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="шлюз по умолчанию">
 		</div>
 
 		<div class="form-group">
 			<label for="broadcast">Укажите broadcast:</label>
-			<input class="form-control" type="text" id="broadcast" name="broadcast" value="{{ request.args.get('broadcast', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="широковещательный адрес">
+			<input class="form-control" type="text" id="broadcast" name="broadcast" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="широковещательный адрес">
 		</div>
 
 		<div class="form-group">
 			<label for="ip_start">Начальный адрес:</label>
-			<input class="form-control" type="text" id="ip_start" name="ip_start" value="{{ request.args.get('ip_start', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="начальный адрес диапазона">
+			<input class="form-control" type="text" id="ip_start" name="ip_start" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="начальный адрес диапазона">
 		</div>
 
 		<div class="form-group">
 			<label for="ip_end">Конечный адрес:</label>
-			<input class="form-control" type="text" id="ip_end" name="ip_end" value="{{ request.args.get('ip_end', '') }}" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="конечный адрес диапазона">
+			<input class="form-control" type="text" id="ip_end" name="ip_end" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="конечный адрес диапазона">
 		</div>
 
 		<div class="form-group">
 			<label for="failover_peer">Failover peer:</label>
-			<input class="form-control" type="text" id="failover_peer" name="failover_peer" value="{{ request.args.get('failover_peer', '') }}"  required size="30" value="nr-dhcpd-failover">
+			<input class="form-control" type="text" id="failover_peer" name="failover_peer" required size="30" value="nr-dhcpd-failover">
 		</div>
 
 		<div class="form-group">
 			<label for="opt_242">опция 242:</label>
 			<small>* укажите параметр L2QVLAN</small>
-			<input class="form-control" type="text" id="opt_242" name="opt_242" value="{{ request.args.get('opt_242', '') }}"  required size="150" value="MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0">
+			<input class="form-control" type="text" id="opt_242" name="opt_242" required size="150" value="MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0">
 		</div>
-
+#}
+     {% for field in form %}
+        <div class="form-group">
+           {{ field.label(class='control-label') }}
+           {{ field(class='form-control') }}
+        </div>     
+     {% endfor %}
+     
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary btn-block" name="net_add">Сконфигурировать подсеть</button>
 		</div>

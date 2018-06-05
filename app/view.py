@@ -8,7 +8,7 @@ from flask import render_template
 # подключим модели
 from models import NetIpv4, HostsAllow, ReservedIpv4
 # импорт форм
-from forms import AddAllowedHost
+from forms import AddNetIpv4, AddAllowedHost, AddReservedIp
 # для обработки значений из формы (вставка)
 from flask import request
 # подключим БД для записи
@@ -17,21 +17,13 @@ from app import db
 from flask import redirect, url_for
 
 # обращаемся к экземпляру класса flask и методу route
-@app.route('/', methods=['GET', 'POST'])
-def index() -> 'html':
-    # обработка формы      
-#    choose_interface = request.args.get('choose_interface')
-#    subnet = request.args.get('subnet')
-#    netmask = request.args.get('netmask')
-#    gw = request.args.get('gw')
-#    broadcast = request.args.get('broadcast')
-#    ip_start = request.args.get('ip_start')
-#    ip_end = request.args.get('ip_end')
-#    failover_peer = request.args.get('failover_peer')
-#    opt_242 = request.args.get('opt_242')    
+@app.route('/', methods=['POST', 'GET'])
+def index() -> 'html':    
+    # форма добавления подсетей для dhcp сервера
+    form=AddNetIpv4()   
     # отображение содержимого таблицы БД
     items=NetIpv4.query.all()
-    return render_template('index.html', items=items)
+    return render_template('index.html', items=items, form=form)
 
 @app.route('/hosts_allow', methods=['POST', 'GET'])
 def hosts_allow() -> 'html':
@@ -49,12 +41,12 @@ def hosts_allow() -> 'html':
         mac_addr = request.form['mac_addr']
         
         try:
+            # имя_переменной = имя_столбца_в_БД
             host_allow = HostsAllow(hostname=hostname, mac_addr=mac_addr)
             db.session.add(host_allow)
             db.session.commit()
         except:
-            print('Добавление хоста завершилось неудачей')
-            
+            print('Добавление хоста завершилось неудачей')            
         return redirect( url_for('hosts_allow') )
         
     # форма добавления хоста в список разрешенных хостов
@@ -63,7 +55,24 @@ def hosts_allow() -> 'html':
     items=HostsAllow.query.all()
     return render_template('hosts_allow.html', items=items, form=form)
 	
-@app.route('/reserved_ip', methods=['GET', 'POST'])
+@app.route('/reserved_ip', methods=['POST', 'GET'])
 def reserved_ip() -> 'html':
+    if request.method == 'POST':
+        hostname = request.form['hostname']
+        ip_addr = request.form['ip_addr']
+        mac_addr = request.form['mac_addr']
+        
+        try:
+            reserved_ip = ReservedIpv4(hostname=hostname, mac_addr=mac_addr, \
+                                  reserved_ipv4=ip_addr)
+            db.session.add(reserved_ip)
+            db.session.commit()
+        except:
+            print('Добавление ip адреса завершилось неудачей')            
+        return redirect( url_for('reserved_ip') )
+    
+    # форма добавления хоста в список разрешенных хостов
+    form = AddReservedIp()
+    # вывод из таблицы списка зарезервированных ip
     items=ReservedIpv4.query.all()
-    return render_template('reserved_ip.html', items=items)
+    return render_template('reserved_ip.html', items=items, form=form)
