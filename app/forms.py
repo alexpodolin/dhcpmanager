@@ -6,20 +6,9 @@ from wtforms import Form, validators, SelectField, StringField
 import netifaces
 
 # форма настройки конифгурации подсети
-class AddNetIpv4(Form):  
-#    def get_interface_name():        
-#        interface_list = netifaces.interfaces()
-#        return interface_list    
-    
-    server_int = SelectField('Выберите сетвой интерфейс:', choices=netifaces.interfaces() )
-        
-
-#    server_int = StringField('Введите сетевой интерфейс:',
-#                          [validators.InputRequired()], 
-#                          render_kw={"placeholder": "server interface",
-#                                     "maxlength": 10,
-#                                     "size": 10})         
-            
+class AddNetIpv4(Form):    
+    # html тэг <option> с динамическим выбором
+    server_int = SelectField('Выберите сетевой интерфейс:', choices=netifaces.interfaces() )
     subnet = StringField('Адрес подсети:',
                           [validators.InputRequired()], 
                           render_kw={"placeholder": "subnet ip",
@@ -59,16 +48,12 @@ class AddNetIpv4(Form):
     failover_peer = StringField('Failover peer:',
                             [validators.InputRequired()],
                             render_kw={"placeholder": "Failover peer",
-                                       "pattern": "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
-                                       "maxlength": 15,
-                                       "size": 15,
                                        "value": "nr-dhcpd-failover"})
     opt_242 = StringField('Опция 242:',
                           [validators.InputRequired()],
                           render_kw={"placeholder": "Option 242",
                                      "size": 150,
                                      "value": "MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0"})
-
 # форма добавления хоста
 class AddAllowedHost(Form):
     # в кач-ве аргумента передаем метку label для поля
@@ -79,20 +64,21 @@ class AddAllowedHost(Form):
     mac_addr = StringField('mac адрес:',
                            [validators.InputRequired()],
                            render_kw={"placeholder": "mac адрес устройства",
-                                       "maxlength": 17,
-                                       "size": 17})
+                                      "maxlength": 17,
+                                      "size": 17})
 # форма резервирования ip адреса
 class AddReservedIp(Form):
     hostname = StringField('Имя устройства:',
                            [validators.InputRequired()], 
                            render_kw={"placeholder": "имя устройства",
-                                       "maxlength": 20})
+                                      "maxlength": 20})
     ip_addr = StringField('ip адрес:',
                           [validators.InputRequired()], 
                           render_kw={"placeholder": "ip адрес устройства",
-                                      "maxlength": 15})
+                                     "pattern": "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
+                                     "maxlength": 15})
     mac_addr = StringField('mac адрес:',
                            [validators.InputRequired()],
                            render_kw={"placeholder": "mac адрес устройства",
-                                       "maxlength": 17,
-                                       "size": 17})
+                                      "maxlength": 17,
+                                      "size": 17})

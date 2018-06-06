@@ -37,7 +37,7 @@ class NetIpv4(db.Model):
         # * позиционные аргументы в любом количестве (список)
         # ** именованные аргументы в любом количестве(словарь)
         # вызвали конструктор класса Model, это предок класса NetIpv4        
-        # super(NetIpv4, self).__init__(*args, **kwargs)        
+        super(NetIpv4, self).__init__(*args, **kwargs)        
         '''
         self.interface = interface
         self.subnet_ipv4 = subnet_ipv4
