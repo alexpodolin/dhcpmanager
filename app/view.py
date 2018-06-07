@@ -110,3 +110,9 @@ def reserved_ip() -> 'html':
     # вывод из таблицы списка зарезервированных ip
     items=ReservedIpv4.query.all()
     return render_template('reserved_ip.html', items=items, form=form)
+
+@app.route('/admin')
+def admin() ->'html':
+    return redirect( url_for('admin') )
+    
+    

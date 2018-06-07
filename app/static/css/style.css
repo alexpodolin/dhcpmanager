@@ -35,6 +35,28 @@ button:hover {
 .action__icon img:hover {
 	opacity: 0.6;
 }
+/*---modal window---*/
+.show__del-window {
+   display: none;
+   width: 100%;
+   height: 100%;
+   top: 0;
+	position: fixed;
+	background-color: rgba(64,64,64,0.9);	
+   animation: bg-fadeIn linear 0.4s;
+}
+@-moz-keyframes bg-fadeIn {
+    from { opacity: 0; }
+	to { opacity: 0.85; }
+}
+@-webkit-keyframes bg-fadeIn {
+    from { opacity: 0; }
+	to { opacity: 0.85; }
+}
+@keyframes bg-fadeIn {
+    from { opacity: 0; }
+	to { opacity: 0.85; }  
+}
 
 .progress__spin {
     border: 5px solid #9ca59f;  /*#f3f3f3*/
@@ -53,3 +75,4 @@ button:hover {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/*------------------*/

@@ -12,3 +12,5 @@ class Configuration(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://manager:password@192.168.160.131/dhcpd'
     # не отслеживать изменения объектов
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # для flask admin
+    SECRET_KEY = 'secret key'

@@ -11,4 +11,4 @@ from app import db
 # точка входа
 if __name__ == '__main__':
     # метод run  экземпляра класса flask
-    app.run(host='0.0.0.0')
+    app.run()

@@ -33,7 +33,7 @@
 <table class="table table-responsive" id="subnets_content">		
 	<thead class="text-nowrap">		
 		<tr>			
-			<th>id</th>
+			<!-- <th>id</th> -->
 			<th>Имя устройства</th>
 			<th>mac address</th>
 			<th>Действия</th>
@@ -43,7 +43,7 @@
 	<tr>
         {% for item in items %}
             <tr>
-                <td>{{ item.id }}</td>
+                <!-- <td>{{ item.id }}</td> -->
                 <td>{{ item.hostname }}</td>
                 <td>{{ item.mac_addr | upper }}</td>              
                 <td>
@@ -53,7 +53,7 @@
 
             			<a href="#" class="action__icon btn" data-toggle="modal" \
                 			data-target="remove__subnet" title="удалить" \
-                			row-id="4" onclick=show_modal_delete(this);>
+                			onclick=showModalDelete(this);>
             				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
             			</a>
             		</td>
@@ -61,28 +61,23 @@
         {% endfor %}
     </tr>									
 </table>
-{% endblock %}
+{% endblock %}		
 		
-		
-<!-- всплывающее окно -->
+<!-- всплывающее окно удаления записи из БД -->
 {% block popup_window %}
-<div id="remove__devices" class="modal remove__devices" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title">Удаление устройства</h4>
-				<button type="button" class="close" onclick="close_modal_delete();">×</button>
-			</div>
-
-			<div class="modal-body">Удалить устройство ?</div>
-			
-			<div class="modal-footer">			
-				<button type="button" class="btn btn-default" onclick="remove_row();">Да</button>		
-				<button type="button" class="btn btn-danger" onclick="close_modal_delete();">Нет</button>						
-			</div>
+<div id="remove__subnet" class="modal show__del-window" tabindex="-1">
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title">Удаление устройства</h4>
+			<button type="button" class="close" onclick="closeModalWindow();">×</button>
 		</div>
+	
+		<div class="modal-footer">	
+		    <button type="button" class="btn btn-success" onclick="closeModalWindow();">Нет</button>
+			 <button type="button" class="btn btn-danger" onclick="removeRow();">Да</button>									
+    	</div>
 	</div>
+</div> 
 </div>
-
-<div class="progress__spin"></div>
 {% endblock %}
