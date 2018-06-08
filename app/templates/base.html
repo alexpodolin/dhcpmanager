@@ -51,7 +51,14 @@
 		{% endblock %}
 		</div>	
 
-		<div class="row col-lg-9 col-md-7 col-sm-12 col-xs-12 wrapper">
+		<div class="row col-lg-9 col-md-7 col-sm-12 col-xs-12 wrapper">		
+		
+		{%- block content_title -%}
+		{%- endblock -%}
+		
+		{%- block content -%}
+		{%- endblock -%}
+		
 		{% block table_result %}
 		{% endblock %}
 		</div>

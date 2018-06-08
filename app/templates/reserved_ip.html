@@ -37,7 +37,7 @@
 			<th>Имя устройства</th>
 			<th>ip адрес</th>
 			<th>mac address</th>			
-			<th>Действия</th>
+			<!-- <th>Действия</th> -->
 		</tr>
 	</thead>
 	<tr>
@@ -47,7 +47,7 @@
                 <td>{{ item.hostname }}</td>
                 <td>{{ item.reserved_ipv4 }}</td> 
                 <td>{{ item.mac_addr | upper }}</td>                              
-                <td>
+             {# <td>
             			<a href="#" class="action__icon btn" title="редактировать">
             				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
             			</a>
@@ -57,7 +57,7 @@
                 			onclick=showModalDelete(this);>
             				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
             			</a>
-            		</td>
+            		</td> #}
             </tr>
         {% endfor %}
     </tr>										

@@ -114,5 +114,10 @@ def reserved_ip() -> 'html':
 @app.route('/admin')
 def admin() ->'html':
     return redirect( url_for('admin') )
+
+@app.errorhandler(404)
+def page_not_found(e) -> 'html':
+    return render_template('404.html'), 404
+
     
     

@@ -36,7 +36,7 @@
 			<!-- <th>id</th> -->
 			<th>Имя устройства</th>
 			<th>mac address</th>
-			<th>Действия</th>
+			<!-- <th>Действия</th> -->
 		</tr>
 	</thead>
 	
@@ -46,7 +46,7 @@
                 <!-- <td>{{ item.id }}</td> -->
                 <td>{{ item.hostname }}</td>
                 <td>{{ item.mac_addr | upper }}</td>              
-                <td>
+                {# <td>
             			<a href="#" class="action__icon btn" title="редактировать">
             				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
             			</a>
@@ -56,7 +56,7 @@
                 			onclick=showModalDelete(this);>
             				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
             			</a>
-            		</td>
+            		</td> #}
             </tr>
         {% endfor %}
     </tr>									

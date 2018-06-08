@@ -13,7 +13,7 @@ from flask_script import Manager
 # подключим админку
 from flask_admin import Admin
 # русификация админки
-from flask.ext.babelex import Babel
+from flask_babelex import Babel
 '''
 переменная для приложения на flask
 вызвали конструктор класса flask и передали ей параметр __name__

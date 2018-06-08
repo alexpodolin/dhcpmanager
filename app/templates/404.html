@@ -1,0 +1,19 @@
+<!-- header -->
+{% extends 'base.html' %}
+
+{%- block title -%} Page not found (404) {%- endblock -%}
+
+<!-- menu -->
+{% set nav_bar = [('/', 'index', 'Доступные подсети'), 
+                  ('/hosts_allow', 'hosts_allow', 'Доступные устройства'),
+        			  ('/reserved_ip', 'reserved_ip', 'Зарезервированные ip-адреса'),
+        			  ('/admin', 'admin', 'Админка') ] -%}
+		
+<!-- основное содержимое -->
+{% block content_title %} <h3>Page not found (404)</h3> {% endblock %}
+<br>
+{% block content %} <p>Enter another url</p> {% endblock %}
+
+<!-- форма слева -->
+
+<!-- таблица результатов -->

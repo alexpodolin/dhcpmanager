@@ -6,6 +6,7 @@ button:hover {
 }
 .wrapper {
 	margin: 3% 0 0 0;
+	display: flow-root;
 }
 .sats-nav {
 	margin: 0 0 3% 0 ;

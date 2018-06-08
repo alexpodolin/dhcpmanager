@@ -94,7 +94,7 @@
     			 <th>Конечный ip</th>
     			 <th>Failover peer</th>
     			 <th>Опция 242</th>
-    			 <th>Действия</th>
+    			 <!-- <th>Действия</th> -->
         </tr>
     </thead>
     <tbody>			
@@ -110,7 +110,7 @@
                 <td>{{ item.ip_range_end }}</td>
                 <td>{{ item.failover_peer }}</td>
                 <td>{{ item.opt_242 }}</td>                
-                <td>
+                {# <td>
             			<a href="#" class="action__icon btn" title="редактировать">
             				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
             			</a>
@@ -120,7 +120,7 @@
                 			onclick=showModalDelete(this);>
             				<img src="static/img/glyphicons-17-bin.png" alt="удалить">
             			</a>
-            		</td>
+            		</td> #}
             </tr>
         {% endfor %}
     </tr>
