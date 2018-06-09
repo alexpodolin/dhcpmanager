@@ -18,6 +18,8 @@ from flask import redirect, url_for
 # информация о сетевых интерфейсах
 import netifaces
 
+from custom_func import create_reserved_ip_conf_file
+
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['POST', 'GET'])
 def index() -> 'html':    
@@ -89,8 +91,11 @@ def hosts_allow() -> 'html':
     items=HostsAllow.query.all()
     return render_template('hosts_allow.html', items=items, form=form)
 
+
+    
 @app.route('/reserved_ip', methods=['POST', 'GET'])
 def reserved_ip() -> 'html':
+        
     if request.method == 'POST':
         hostname = request.form['hostname']
         ip_addr = request.form['ip_addr']
@@ -101,6 +106,9 @@ def reserved_ip() -> 'html':
                                   reserved_ipv4=ip_addr)
             db.session.add(reserved_ip)
             db.session.commit()
+            
+            create_reserved_ip_conf_file()
+            
         except:
             print('Добавление ip адреса завершилось неудачей')            
         return redirect( url_for('reserved_ip') )
