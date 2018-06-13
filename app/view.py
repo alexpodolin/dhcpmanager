@@ -17,8 +17,8 @@ from app import db
 from flask import redirect, url_for
 # информация о сетевых интерфейсах
 import netifaces
-
-from custom_func import create_reserved_ip_conf_file
+# подключим необходимые функции
+from custom_func import ssh_to_dhcp, create_subnet, create_hosts_allow, create_reserved_ip
 
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['POST', 'GET'])
@@ -43,21 +43,23 @@ def index() -> 'html':
                                  broadcast=broadcast, \
                                  ip_range_start=ip_range_start, \
                                  ip_range_end=ip_range_end, \
-                                 failover_peer=failover_peer, opt_242=opt_242) 
-            
+                                 failover_peer=failover_peer, opt_242=opt_242)            
             db.session.add(add_subnet)
             db.session.commit()
+            # соединимся с сервером 
+            # создадим dhcpd конфиг при добавлении новой записи в БД
+            ssh_to_dhcp()
+            create_subnet()
+            
         except:
             print('Добавление сети завершилось неудачей')    
         # после выполнения вернемся на нашу страницу
-        return redirect( url_for('index') )
-    
+        return redirect( url_for('index') )    
     # форма добавления подсетей для dhcp сервера
     form=AddNetIpv4()
     # html тэг <option> с динамическим выбором
     form.server_int.choices = [(server_int, server_int) for server_int in netifaces.interfaces()]
-    form.process()
-    
+    form.process()    
     # отображение содержимого таблицы БД
     items=NetIpv4.query.all()
     return render_template('index.html', items=items, form=form)
@@ -68,8 +70,7 @@ def hosts_allow() -> 'html':
     #если необходимо вывести определенные столбцы
     items = HostsAllow.query.with_entities(HostsAllow.id, \
                                             HostsAllow.hostname, \
-                                            HostsAllow.mac_addr)
-                                        
+                                            HostsAllow.mac_addr)                                        
     return render_template('hosts_allow.html', items=items)
     ''' 
     if request.method == 'POST':
@@ -81,6 +82,10 @@ def hosts_allow() -> 'html':
             host_allow = HostsAllow(hostname=hostname, mac_addr=mac_addr)
             db.session.add(host_allow)
             db.session.commit()
+            
+            ssh_to_dhcp()            
+            create_hosts_allow()
+            
         except:
             print('Добавление хоста завершилось неудачей')            
         return redirect( url_for('hosts_allow') )
@@ -91,8 +96,6 @@ def hosts_allow() -> 'html':
     items=HostsAllow.query.all()
     return render_template('hosts_allow.html', items=items, form=form)
 
-
-    
 @app.route('/reserved_ip', methods=['POST', 'GET'])
 def reserved_ip() -> 'html':
         
@@ -107,7 +110,8 @@ def reserved_ip() -> 'html':
             db.session.add(reserved_ip)
             db.session.commit()
             
-            create_reserved_ip_conf_file()
+            ssh_to_dhcp()            
+            create_reserved_ip()
             
         except:
             print('Добавление ip адреса завершилось неудачей')            
@@ -119,10 +123,12 @@ def reserved_ip() -> 'html':
     items=ReservedIpv4.query.all()
     return render_template('reserved_ip.html', items=items, form=form)
 
+# админка
 @app.route('/admin')
 def admin() ->'html':
     return redirect( url_for('admin') )
 
+# страница 404
 @app.errorhandler(404)
 def page_not_found(e) -> 'html':
     return render_template('404.html'), 404
