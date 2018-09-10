@@ -45,6 +45,21 @@ class AddNetIpv4(Form):
                                        "pattern": "\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
                                        "maxlength": 15,
                                        "size": 15})
+    dns_sfx = StringField('Доменное имя (dns суффикс):',
+                            [validators.InputRequired()],
+                            render_kw={"maxlength": 30,
+                                       "size": 30,
+                                       "value": "nr.local"})
+    dns_prm = StringField('Dns сервер основной:',
+                            [validators.InputRequired()],
+                            render_kw={"maxlength": 15,
+                                       "size": 15,
+                                       "value": "192.168.156.93"})
+    dns_sec = StringField('Dns сервер резервный:',
+                            [validators.InputRequired()],
+                            render_kw={"maxlength": 15,
+                                       "size": 15,
+                                       "value": "192.168.156.94"})    
     failover_peer = StringField('Failover peer:',
                             [validators.InputRequired()],
                             render_kw={"placeholder": "Failover peer",

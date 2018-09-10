@@ -33,6 +33,9 @@ def index() -> 'html':
         broadcast = request.form['broadcast']
         ip_range_start = request.form['ip_start']
         ip_range_end = request.form['ip_end']
+        dns_sfx = request.form['dns_sfx']
+        dns_srv_01 = request.form['dns_prm']
+        dns_srv_02 = request.form['dns_sec']
         failover_peer = request.form['failover_peer']
         opt_242 = request.form['opt_242']
         
@@ -42,7 +45,8 @@ def index() -> 'html':
                                  netmask=netmask, default_gw=default_gw, \
                                  broadcast=broadcast, \
                                  ip_range_start=ip_range_start, \
-                                 ip_range_end=ip_range_end, \
+                                 ip_range_end=ip_range_end, dns_suffix=dns_sfx, \
+                                 dns_srv_01=dns_srv_01, dns_srv_02=dns_srv_02, \
                                  failover_peer=failover_peer, opt_242=opt_242)            
             db.session.add(add_subnet)
             db.session.commit()
@@ -106,7 +110,7 @@ def reserved_ip() -> 'html':
         
         try:
             reserved_ip = ReservedIpv4(hostname=hostname, mac_addr=mac_addr, \
-                                  reserved_ipv4=ip_addr)
+                                  res_ipv4=ip_addr)
             db.session.add(reserved_ip)
             db.session.commit()
             

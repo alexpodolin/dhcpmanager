@@ -48,6 +48,10 @@ def create_subnet():
             result.write('  option routers\t\t' + item.default_gw + ';' + '\n')
             result.write('  option subnet-mask\t\t' + item.netmask + ';' + '\n')
             result.write('  option broadcast-address\t' + item.broadcast + ';' + '\n')
+            
+            result.write('  option domain-name\t\t' + item.dns_suffix + ';' + '\n')
+            result.write('  option domain-name-servers\t' + item.dns_srv_01 + ', ' + item.dns_srv_02 + ';' + '\n')
+            
             result.write('  option avaya-242\t\t' + '"' + item.opt_242 + '";' + '\n\n')
             result.write('  pool {' + '\n')
             result.write('    deny\t\tunknown-clients;' + '\n')

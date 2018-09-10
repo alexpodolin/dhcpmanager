@@ -16,6 +16,7 @@ from app import db
 класс котоый отвечает за хранение инф. о настройках конфигурации
 dhcpd сервера. Он наследует свойства от класса Model SQLAlchemy
 '''
+
 class NetIpv4(db.Model):
     # таблица настроек которые раздает dhcp сервер
     id = db.Column(db.SmallInteger(), primary_key=True, autoincrement=True)
@@ -26,6 +27,9 @@ class NetIpv4(db.Model):
     broadcast = db.Column(db.VARCHAR(15), nullable=False)
     ip_range_start = db.Column(db.VARCHAR(15), nullable=False)
     ip_range_end = db.Column(db.VARCHAR(15), nullable=False)
+    dns_suffix = db.Column(db.VARCHAR(20), nullable=False, server_default='nr.local')
+    dns_srv_01 = db.Column(db.VARCHAR(15), nullable=False, server_default='192.168.156.93')
+    dns_srv_02 = db.Column(db.VARCHAR(15), nullable=False, server_default='192.168.156.94')
     failover_peer = db.Column(db.VARCHAR(20), nullable=False, \
                               server_default='nr-dhcpd-failover')
     opt_242 = db.Column(db.VARCHAR(150), nullable=True)
@@ -55,12 +59,14 @@ class NetIpv4(db.Model):
     def __repr__(self):
         return '<NetIpv4 id: {}, interface: {}, subnet_ipv4: {}, netmask: {}, \
                           default_gw: {}, broadcast: {}, ip_range_start: {}, \
-                          ip_range_end: {}, failover_peer: {}, opt_242: {} >' \
+                          ip_range_end: {}, dns_suffix: {}, dns_srv_01: {}, \
+                          dns_srv_02: {}, failover_peer: {}, opt_242: {} >' \
                           .format(self.id, self.interface, self.subnet_ipv4, \
                                   self.netmask, self.default_gw, \
                                   self.broadcast, self.ip_range_start, \
-                                  self.ip_range_end, self.failover_peer, \
-                                  self.opt_242)
+                                  self.ip_range_end, self.dns_suffix, \
+                                  self.dns_srv_01, self.dns_srv_02, \
+                                  self.failover_peer, self.opt_242)
 
 class HostsAllow(db.Model):
     # список хостов, которые получают настройки по dhcp сервера
@@ -80,11 +86,11 @@ class ReservedIpv4(db.Model):
     id = db.Column(db.SmallInteger(), primary_key=True, autoincrement=True)
     hostname = db.Column(db.VARCHAR(32), nullable=False)
     mac_addr = db.Column(db.VARCHAR(18), nullable=False, unique=True)
-    reserved_ipv4 = db.Column(db.VARCHAR(15), nullable=False, unique=True)
+    res_ipv4 = db.Column(db.VARCHAR(15), nullable=False, unique=True)
     
     def __init__(self, *args, **kwargs):
         super(ReservedIpv4, self).__init__(*args, **kwargs)
         
     def __repr__(self):
-        return'<ReservedIpv4 id: {}, hostname: {}, mac_addr: {} reserved_ipv4: {}>' \
-        .format(self.id, self.hostname, self.mac_addr, self.reserved_ipv4)                        
+        return'<ReservedIpv4 id: {}, hostname: {}, mac_addr: {} res_ipv4: {}>' \
+        .format(self.id, self.hostname, self.mac_addr, self.res_ipv4)                        

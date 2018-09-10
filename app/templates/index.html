@@ -64,15 +64,16 @@
 			<input class="form-control" type="text" id="opt_242" name="opt_242" required size="150" value="MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0">
 		</div>
 #}
-     {# переменная form из view.py #}
+     {# переменная form из view.py #}     
      {% for field in form %}
         <div class="form-group">
            {{ field.label(class='control-label') }}
            {{ field(class='form-control') }}
-        </div>     
+        </div>
      {% endfor %}
-     
-		<div class="form-group">
+     <small>* укажите параметр L2QVLAN</small>
+    
+		<div class="form-group">		
 			<button type="submit" class="btn btn-primary btn-block" name="net_add">Сконфигурировать подсеть</button>
 		</div>
 	</fieldset>
@@ -92,6 +93,9 @@
     			 <th>Broadcast</th>
     			 <th>Начальный ip</th>
     			 <th>Конечный ip</th>
+    			 <th>DNS суффикс</th>
+    			 <th>DNS сервер осн.</th>
+    			 <th>DNS сервер рез.</th>
     			 <th>Failover peer</th>
     			 <th>Опция 242</th>
     			 <!-- <th>Действия</th> -->
@@ -108,6 +112,9 @@
                 <td>{{ item.broadcast }}</td>
                 <td>{{ item.ip_range_start }}</td>
                 <td>{{ item.ip_range_end }}</td>
+                <td>{{ item.dns_suffix }}</td>
+                <td>{{ item.dns_srv_01 }}</td>
+                <td>{{ item.dns_srv_02 }}</td>
                 <td>{{ item.failover_peer }}</td>
                 <td>{{ item.opt_242 }}</td>                
                 {# <td>
