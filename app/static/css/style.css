@@ -1,3 +1,37 @@
+.wrapper-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 13% auto;
+    width: 23%;
+}
+.form__legend {
+    text-align: center;
+    margin: 0 0 1% 0;
+}
+.login__msg {
+    color: red;
+    list-style-type: none;
+    padding: 0;
+    margin: -3% 0 3% 0;
+    text-align: center;
+}
+.btn__custom {
+    margin: 0 0 1% 0;
+}
+.btn__custom:hover {
+    cursor: pointer;
+}
+.user__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+/*.username, 
+.username__logout {
+   display: flex;
+   justify-content: flex-end;
+}*/
 button:hover {
 	cursor: pointer;
 }
@@ -5,7 +39,7 @@ button:hover {
 	cursor: pointer;
 }
 .wrapper {
-	margin: 3% 0 0 0;
+	margin: 1% 0 0 0;
 	display: flow-root;
 }
 .sats-nav {

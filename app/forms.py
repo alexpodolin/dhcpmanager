@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+
 # соотношение м.у моделями и формами
-from wtforms import Form, validators, SelectField, StringField
+from wtforms import Form, validators, SelectField, StringField, \
+                    PasswordField, BooleanField, SubmitField
+                    
+from flask_wtf import FlaskForm
+# проверка корректности введенных значений
+from wtforms.validators import DataRequired
 
 # информация о сетевых интерфейсах
 import netifaces
@@ -97,3 +103,14 @@ class AddReservedIp(Form):
                            render_kw={"placeholder": "mac адрес устройства",
                                       "maxlength": 17,
                                       "size": 17})
+
+# форма авторизации
+class LoginForm(FlaskForm):
+    username = StringField('Имя пользователя:', 
+                           validators=[DataRequired()],
+                           render_kw={"placeholder": "Введите логин"})
+    password = PasswordField('Пароль:', 
+                             validators=[DataRequired()],
+                             render_kw={"placeholder": "Введите пароль"})
+    remember_me = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')

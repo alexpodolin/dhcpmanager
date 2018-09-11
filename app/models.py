@@ -9,16 +9,20 @@
 >>> db.create_all()
 БД должна быть создана и прописаны GRANT`ы
 '''
-
 # импортируем созданную БД
 from app import db
-'''
-класс котоый отвечает за хранение инф. о настройках конфигурации
-dhcpd сервера. Он наследует свойства от класса Model SQLAlchemy
-'''
+# генерирование и проверка пользовательского пароля
+from werkzeug.security import generate_password_hash, check_password_hash
+# UserMixin класс который включает в себя  основные свойства, такие как \
+# подлинность учетных данных, активенли пользователь, id пользователя и т.д.
+from flask_login import UserMixin
+# подключим наш экземпляр класса для работы с авторизацией
+from app import login
 
 class NetIpv4(db.Model):
-    # таблица настроек которые раздает dhcp сервер
+    '''класс котоый отвечает за хранение инф. о настройках конфигурации
+    dhcpd сервера. Он наследует свойства от класса Model SQLAlchemy
+    '''
     id = db.Column(db.SmallInteger(), primary_key=True, autoincrement=True)
     interface = db.Column(db.VARCHAR(15), nullable=False)
     subnet_ipv4 = db.Column(db.VARCHAR(15), nullable=False)
@@ -93,4 +97,44 @@ class ReservedIpv4(db.Model):
         
     def __repr__(self):
         return'<ReservedIpv4 id: {}, hostname: {}, mac_addr: {} res_ipv4: {}>' \
-        .format(self.id, self.hostname, self.mac_addr, self.res_ipv4)                        
+        .format(self.id, self.hostname, self.mac_addr, self.res_ipv4)  
+
+class User(UserMixin, db.Model):
+    '''Таблица с пользователями и их паролями'''               
+    id = db.Column(db.SmallInteger(), primary_key=True, autoincrement=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+    
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+    
+    def set_password(self, password):
+        '''Генерируем хэш пароля'''
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        '''Проверка пароля'''
+        return check_password_hash(self.password_hash, password)
+    
+@login.user_loader
+def load_user(id):
+    '''Flask-Login отслеживает зарегистрированного пользователя, сохраняя 
+    его уникальный идентификатор в пользовательском сеансе Flask, назначенный 
+    каждому пользователю, который подключается к приложению. 
+    Каждый раз, когда вошедший в систему пользователь переходит на новую 
+    страницу, Flask-Login извлекает идентификатор пользователя из сеанса 
+    и затем загружает этого пользователя в память.
+    Поскольку Flask-Login ничего не знает о базах данных, 
+    ему нужна помощь приложения при загрузке пользователя. 
+    По этой причине расширение ожидает, 
+    что приложение настроит функцию загрузчика пользователя, 
+    которую можно вызвать для загрузки пользователя с идентификатором. 
+    Эта функция может быть добавлена ​​в модуле app/models.py:
+    Пользовательский загрузчик зарегистрирован в Flask-Login 
+    с помощью декоратора @login.user_loader. 
+    Идентификатор, который Flask-Login переходит к функции в качестве аргумента, 
+    будет строкой, поэтому для баз данных, использующих числовые идентификаторы, 
+    необходимо преобразовать строку в целое число, как вы видите выше int(id).'''
+    return User.query.get(int(id))
+        

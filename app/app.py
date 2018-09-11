@@ -14,6 +14,10 @@ from flask_script import Manager
 from flask_admin import Admin
 # русификация админки
 from flask_babelex import Babel
+# Подключим вход пользователя в систему
+from flask_login import LoginManager
+
+
 '''
 переменная для приложения на flask
 вызвали конструктор класса flask и передали ей параметр __name__
@@ -22,6 +26,8 @@ __name__ это имя текущего файла (app.py)
 по сути мы создали приложение
 '''
 app = Flask(__name__)
+# Инициализируем Flask_login и создадим его экземпляр
+login = LoginManager(app)
 # русификация админки
 babel = Babel(app)
 
@@ -50,12 +56,13 @@ manager.add_command('db', MigrateCommand)
 ### ADMIN ###
 # имопртируем модели
 from flask_admin.contrib.sqla import ModelView
-from models import NetIpv4, HostsAllow, ReservedIpv4
+from models import NetIpv4, HostsAllow, ReservedIpv4, User
 # подключим админку
 admin = Admin(app)
 admin.add_view(ModelView(NetIpv4, db.session, 'Доступные подсети'))
 admin.add_view(ModelView(HostsAllow, db.session, 'Разрешенные хосты'))
 admin.add_view(ModelView(ReservedIpv4, db.session, 'Зарезервированные ip'))
+admin.add_view(ModelView(User, db.session, 'Пользователи системы'))
 
 # русификация админки
 @babel.localeselector

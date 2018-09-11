@@ -2,26 +2,50 @@
 # view отвечает за отображение данных ч.з шаблоны
 
 # импортируем наше приложение (переменную) для получения запросов от юзера
-from app import app
-# render_template - ф-ия котороя занимается обработкой содержимого шаблонов
-from flask import render_template
-# подключим модели
-from models import NetIpv4, HostsAllow, ReservedIpv4
-# импорт форм
-from forms import AddNetIpv4, AddAllowedHost, AddReservedIp
-# для обработки значений из формы (вставка)
-from flask import request
 # подключим БД для записи
-from app import db
-# для редиректа
-from flask import redirect, url_for
+from app import app, db
+# render_template - ф-ия котороя занимается обработкой содержимого шаблонов
+# Функция flash() — полезный способ показать сообщение пользователю
+# request для обработки значений из формы (вставка)
+from flask import render_template, redirect, request, url_for, flash
+# подключим модели
+from models import NetIpv4, HostsAllow, ReservedIpv4, User
+# импорт форм
+from forms import AddNetIpv4, AddAllowedHost, AddReservedIp, LoginForm
 # информация о сетевых интерфейсах
 import netifaces
 # подключим необходимые функции
 from custom_func import ssh_to_dhcp, create_subnet, create_hosts_allow, create_reserved_ip
+# логин пользователя
+from flask_login import current_user, login_user, logout_user, login_required
 
 # обращаемся к экземпляру класса flask и методу route
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET', 'POST'])
+def login() -> 'html':
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    form = LoginForm()    
+    
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        
+        if user is None or not user.check_password(form.password.data):
+            flash('Неверный логин или пароль'.format(
+            form.username.data, form.remember_me.data))
+            return redirect(url_for('login'))
+        
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('index'))
+    
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+@app.route('/index', methods=['POST', 'GET'])
 def index() -> 'html':    
     # добавление в БД значений из формы
     if request.method == 'POST':
@@ -136,6 +160,3 @@ def admin() ->'html':
 @app.errorhandler(404)
 def page_not_found(e) -> 'html':
     return render_template('404.html'), 404
-
-    
-    
