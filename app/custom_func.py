@@ -52,7 +52,7 @@ def create_subnet():
             result.write('  option domain-name\t\t' + item.dns_suffix + ';' + '\n')
             result.write('  option domain-name-servers\t' + item.dns_srv_01 + ', ' + item.dns_srv_02 + ';' + '\n')
             
-            result.write('  option avaya-242\t\t' + '"' + item.opt_242 + '";' + '\n\n')
+            result.write('  option avaya-242\t\t' + '"' + 'MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=' + item.vlan_num + ',VLANTEST=0' + '";' + '\n\n')
             result.write('  pool {' + '\n')
             result.write('    deny\t\tunknown-clients;' + '\n')
             result.write('    range\t\t' + item.ip_range_start + ' ' + item.ip_range_end + ';' + '\n')

@@ -9,7 +9,7 @@
 
 <!-- форма слева -->
 {% block content_form %}
-                                           {# ф-ия которая отвечает за рендер шаблона #}
+
 <form class="form-control config" action="{{ url_for('index') }}" method="POST" autocomplete="on">
 	<fieldset>
 		<legend>Настройки конфига подсети</legend>
@@ -67,7 +67,7 @@
                 <td>{{ item.dns_srv_01 }}</td>
                 <td>{{ item.dns_srv_02 }}</td>
                 <td>{{ item.failover_peer }}</td>
-                <td>MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN={{ item.opt_242 }},VLANTEST=0</td>                
+                <td>MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN={{ item.vlan_num }},VLANTEST=0</td>                
                 {# <td>
             			<a href="#" class="action__icon btn" title="редактировать">
             				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">
