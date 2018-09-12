@@ -70,11 +70,10 @@ class AddNetIpv4(Form):
                             [validators.InputRequired()],
                             render_kw={"placeholder": "Failover peer",
                                        "value": "nr-dhcpd-failover"})
-    opt_242 = StringField('Опция 242:',
+    vlan_num = StringField('Номер vlan:',
                           [validators.InputRequired()],
-                          render_kw={"placeholder": "Option 242",
-                                     "size": 150,
-                                     "value": "MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0"})
+                          render_kw={"placeholder": "Номер vlan для option 242",
+                                     "size": 4})
 # форма добавления хоста
 class AddAllowedHost(Form):
     # в кач-ве аргумента передаем метку label для поля

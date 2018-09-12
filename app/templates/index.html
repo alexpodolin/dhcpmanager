@@ -14,56 +14,7 @@
 	<fieldset>
 		<legend>Настройки конфига подсети</legend>
 		<small>* если в списке не отображаются нужный vlan, то необходимо его создать на всех серверах</small>
-{#
-		<div class="form-group">
-			<label for="choose_interface">Выберите интерфейс:</label>
-			<select id="choose_interface" class="form-control" name="choose_interface" required>
-				<option value="">---</option>
-				<option value="203">203</option>
-			</select>
-		</div>
 
-		<div class="form-group">
-			<label for="subnet">Адрес подсети:</label>
-			<input class="form-control" type="text" id="subnet" name="subnet" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="адрес подсети">
-		</div>
-
-		<div class="form-group">
-			<label for="netmask">Маска подсети:</label>
-			<input class="form-control" type="text" id="netmask" name="netmask" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="маска подсети">
-		</div>
-
-		<div class="form-group">
-			<label for="gw">Шлюз по умолчанию:</label>
-			<input class="form-control" type="text" id="gw" name="gw" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="шлюз по умолчанию">
-		</div>
-
-		<div class="form-group">
-			<label for="broadcast">Укажите broadcast:</label>
-			<input class="form-control" type="text" id="broadcast" name="broadcast" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="широковещательный адрес">
-		</div>
-
-		<div class="form-group">
-			<label for="ip_start">Начальный адрес:</label>
-			<input class="form-control" type="text" id="ip_start" name="ip_start" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="начальный адрес диапазона">
-		</div>
-
-		<div class="form-group">
-			<label for="ip_end">Конечный адрес:</label>
-			<input class="form-control" type="text" id="ip_end" name="ip_end" maxlength="15" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" required size="15" placeholder="конечный адрес диапазона">
-		</div>
-
-		<div class="form-group">
-			<label for="failover_peer">Failover peer:</label>
-			<input class="form-control" type="text" id="failover_peer" name="failover_peer" required size="30" value="nr-dhcpd-failover">
-		</div>
-
-		<div class="form-group">
-			<label for="opt_242">опция 242:</label>
-			<small>* укажите параметр L2QVLAN</small>
-			<input class="form-control" type="text" id="opt_242" name="opt_242" required size="150" value="MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=XXX,VLANTEST=0">
-		</div>
-#}
      {# переменная form из view.py #}     
      {% for field in form %}
         <div class="form-group">
@@ -71,7 +22,7 @@
            {{ field(class='form-control') }}
         </div>
      {% endfor %}
-     <small>* укажите параметр L2QVLAN</small>
+     <small>* номер vlan обычно совпадает с подинтерфейсом</small>
     
 		<div class="form-group">		
 			<button type="submit" class="btn btn-primary btn-block" name="net_add">Сконфигурировать подсеть</button>
@@ -116,7 +67,7 @@
                 <td>{{ item.dns_srv_01 }}</td>
                 <td>{{ item.dns_srv_02 }}</td>
                 <td>{{ item.failover_peer }}</td>
-                <td>{{ item.opt_242 }}</td>                
+                <td>MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN={{ item.opt_242 }},VLANTEST=0</td>                
                 {# <td>
             			<a href="#" class="action__icon btn" title="редактировать">
             				<img src="static/img/glyphicons-31-pencil.png" alt="редактировать">

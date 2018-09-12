@@ -70,7 +70,7 @@ def index() -> 'html':
         dns_srv_01 = request.form['dns_prm']
         dns_srv_02 = request.form['dns_sec']
         failover_peer = request.form['failover_peer']
-        opt_242 = request.form['opt_242']
+        opt_242 = request.form['vlan_num']
         
         try:
             # имя_столбца_в_БД(как в model.py) = имя_переменной 
