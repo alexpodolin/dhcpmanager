@@ -28,6 +28,8 @@ __name__ это имя текущего файла (app.py)
 app = Flask(__name__)
 # Инициализируем Flask_login и создадим его экземпляр
 login = LoginManager(app)
+
+login.login_view = 'login'
 # русификация админки
 babel = Babel(app)
 

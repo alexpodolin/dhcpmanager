@@ -18,6 +18,9 @@ import netifaces
 from custom_func import ssh_to_dhcp, create_subnet, create_hosts_allow, create_reserved_ip
 # логин пользователя
 from flask_login import current_user, login_user, logout_user, login_required
+# для обработки @login_required
+from werkzeug.urls import url_parse
+
 
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['GET', 'POST'])
@@ -36,16 +39,22 @@ def login() -> 'html':
             return redirect(url_for('login'))
         
         login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
+        next_page = request.args.get('next')
+        
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
     
     return render_template('login.html', form=form)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
 @app.route('/index', methods=['POST', 'GET'])
+@login_required
 def index() -> 'html':    
     # добавление в БД значений из формы
     if request.method == 'POST':
@@ -93,6 +102,7 @@ def index() -> 'html':
     return render_template('index.html', items=items, form=form)
 
 @app.route('/hosts_allow', methods=['POST', 'GET'])
+@login_required
 def hosts_allow() -> 'html':
     '''
     #если необходимо вывести определенные столбцы
@@ -125,6 +135,7 @@ def hosts_allow() -> 'html':
     return render_template('hosts_allow.html', items=items, form=form)
 
 @app.route('/reserved_ip', methods=['POST', 'GET'])
+@login_required
 def reserved_ip() -> 'html':
         
     if request.method == 'POST':
@@ -152,11 +163,13 @@ def reserved_ip() -> 'html':
     return render_template('reserved_ip.html', items=items, form=form)
 
 # админка
-@app.route('/admin')
+@app.route('/admin', methods=['POST', 'GET'])
+@login_required
 def admin() ->'html':
-    return redirect( url_for('admin') )
+    return redirect(url_for('admin'))
 
 # страница 404
 @app.errorhandler(404)
+@login_required
 def page_not_found(e) -> 'html':
     return render_template('404.html'), 404
