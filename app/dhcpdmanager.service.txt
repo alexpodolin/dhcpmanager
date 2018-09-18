@@ -1,0 +1,15 @@
+[Unit]
+Description=uWSGI instance to serve dhcpdmanager-uwsgi project
+After=network.target
+
+[Service]
+User=dhcpdmanager
+Group=nobody
+#User=root
+#Group=root
+WorkingDirectory=/data/www/dhcpdmanager/app
+Environment="PATH=/data/www/dhcpdmanager/venv/bin"
+ExecStart=/data/www/dhcpdmanager/venv/bin/uwsgi --ini uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target

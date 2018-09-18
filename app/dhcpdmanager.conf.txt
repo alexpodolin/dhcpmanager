@@ -1,0 +1,22 @@
+server {
+    listen 192.168.164.179:80;
+    server_tokens off;
+    server_name dhcpdmanager dhcpdmanager.sats.local;
+
+    access_log  /var/log/nginx/dhcpdmanager.access.log  main;
+    error_log  /var/log/nginx/dhcpdmanager.error.log  info;
+
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass dhcpdmanager_upstream;
+    }
+
+    location /static/ {
+        root /data/www/dhcpdmanager/app;
+    }
+}
+
+upstream dhcpdmanager_upstream {
+    server unix:/data/www/dhcpdmanager/run/dhcpdmanager_uwsgi.sock;
+}

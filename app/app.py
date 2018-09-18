@@ -17,7 +17,6 @@ from flask_babelex import Babel
 # Подключим вход пользователя в систему
 from flask_login import LoginManager
 
-
 '''
 переменная для приложения на flask
 вызвали конструктор класса flask и передали ей параметр __name__
