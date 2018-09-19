@@ -9,7 +9,7 @@ class Configuration(object):
     # подробный вывод
     DEBUG = True
     # подключили БД
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://manager:password@192.168.160.131/dhcpd'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://manager:x3H47AV5@localhost/dhcpd_new'
     # не отслеживать изменения объектов
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # для flask admin

@@ -13,7 +13,7 @@
 <form class="form-control config" action="{{ url_for('index') }}" method="POST" autocomplete="on">
 	<fieldset>
 		<legend>Настройки конфига подсети</legend>
-		<small>* если в списке не отображаются нужный vlan, то необходимо его создать на всех серверах</small>
+		<small>* если в списке не отображаются нужный интерфейс, то необходимо его создать на всех серверах</small>
 
      {# переменная form из view.py #}     
      {% for field in form %}

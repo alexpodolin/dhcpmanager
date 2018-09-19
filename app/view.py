@@ -21,6 +21,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 # для обработки @login_required
 from werkzeug.urls import url_parse
 
+import paramiko
+srv_list = ['nr-dhcp-01', 'nr-dhcp-02']
 
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['GET', 'POST'])
@@ -86,9 +88,9 @@ def index() -> 'html':
             db.session.commit()
             # соединимся с сервером 
             # создадим dhcpd конфиг при добавлении новой записи в БД
-            ssh_to_dhcp()
             create_subnet()
-            
+            ssh_to_dhcp()  
+
         except:
             print('Добавление сети завершилось неудачей')    
         # после выполнения вернемся на нашу страницу
@@ -122,8 +124,9 @@ def hosts_allow() -> 'html':
             db.session.add(host_allow)
             db.session.commit()
             
-            ssh_to_dhcp()            
             create_hosts_allow()
+            ssh_to_dhcp()            
+            
             
         except:
             print('Добавление хоста завершилось неудачей')            
@@ -150,8 +153,9 @@ def reserved_ip() -> 'html':
             db.session.add(reserved_ip)
             db.session.commit()
             
-            ssh_to_dhcp()            
             create_reserved_ip()
+            ssh_to_dhcp()            
+            
             
         except:
             print('Добавление ip адреса завершилось неудачей')            

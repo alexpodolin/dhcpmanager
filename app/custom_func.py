@@ -11,20 +11,6 @@ import os
 # импортируем модели
 from models import NetIpv4, HostsAllow, ReservedIpv4
 
-# соединимся с двумя dhcp серверами
-def ssh_to_dhcp():
-#    srv_list = ['nr-dhcp-01', 'nr-dhcp-02']
-    srv_list = ['localhost']
-    
-    for srv in srv_list:
-        # Cоздаем объект ssh класса SSHClient
-        ssh = paramiko.SSHClient()
-        # Для автоматизации принятия ключа в paramiko
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        # подключение 
-        ssh.connect(srv, username='podolin', key_filename='/root/.ssh/id_rsa')
-
-
 # создание конфига списка подсетей
 def create_subnet():     
     # где лежит конфиг
@@ -49,7 +35,7 @@ def create_subnet():
             result.write('  option subnet-mask\t\t' + item.netmask + ';' + '\n')
             result.write('  option broadcast-address\t' + item.broadcast + ';' + '\n')
             
-            result.write('  option domain-name\t\t' + item.dns_suffix + ';' + '\n')
+            result.write('  option domain-name\t\t' + '"' + item.dns_suffix + '"' + ';' + '\n')
             result.write('  option domain-name-servers\t' + item.dns_srv_01 + ', ' + item.dns_srv_02 + ';' + '\n')
             
             result.write('  option avaya-242\t\t' + '"' + 'MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=' + item.vlan_num + ',VLANTEST=0' + '";' + '\n\n')
@@ -104,8 +90,8 @@ def create_reserved_ip():
     with open(conf_path, 'w+') as result:
         for item in items:
             result.write('host ' + item.hostname + ' {' + '\n')
-            result.write('    hardware ethernet ' + item.reserved_ipv4 + ';' + '\n')
-            result.write('    fixed-address ' + item.mac_addr + ';' + '\n')
+            result.write('    hardware ethernet ' + item.mac_addr + ';' + '\n')
+            result.write('    fixed-address ' + item.res_ipv4 + ';' + '\n')
             result.write('}' + '\n\n')
         result.close()
     retcode = subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True)
@@ -115,3 +101,18 @@ def create_reserved_ip():
         shutil.copy2(conf_path_bkp, conf_path)
         subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True)
         os.remove(conf_path_bkp)
+
+# соединимся с двумя dhcp серверами
+def ssh_to_dhcp():
+    srv_list = ['nr-dhcp-01', 'nr-dhcp-02']
+
+    for srv in srv_list:
+        # Cоздаем объект ssh класса SSHClient
+        ssh = paramiko.SSHClient()
+        # Для автоматизации принятия ключа в paramiko
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # подключение
+        ssh.connect(srv, username='root', key_filename='/root/.ssh/id_rsa')
+        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd')
+
