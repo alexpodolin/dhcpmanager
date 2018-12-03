@@ -36,12 +36,12 @@ class NetIpv4(db.Model):
     dns_srv_02 = db.Column(db.VARCHAR(15), nullable=False, server_default='192.168.156.94')
     failover_peer = db.Column(db.VARCHAR(20), nullable=False, \
                               server_default='nr-dhcpd-failover')
-    #opt_242 = db.Column(db.VARCHAR(150), nullable=True)
-    vlan_num = db.Column(db.VARCHAR(150), nullable=False)
+    opt_242 = db.Column(db.VARCHAR(150), nullable=True)
+    #vlan_num = db.Column(db.VARCHAR(150), nullable=False)
 	 
     # мы определили свойства класса (свойства таблицы) выше, теперь определим
     # конструктор класса
-    # def __init__(self, interface, subnet_ipv4, netmask, default_gw, broadcast, ip_range_start, ip_range_end, failover_peer, vlan_num):
+    # def __init__(self, interface, subnet_ipv4, netmask, default_gw, broadcast, ip_range_start, ip_range_end, failover_peer, opt_242):
     def __init__(self, *args, **kwargs):
         # * позиционные аргументы в любом количестве (список)
         # ** именованные аргументы в любом количестве(словарь)
@@ -56,7 +56,7 @@ class NetIpv4(db.Model):
         self.ip_range_start = ip_range_start
         self.ip_range_end = ip_range_end
         self.failover_peer = failover_peer
-        self.vlan_num = vlan_num
+        self.opt_242 = opt_242
         '''
     # вызывается встроенной функцией repr; возвращает "сырые" данные, 
     # использующиеся для внутреннего представления в python.
@@ -65,13 +65,13 @@ class NetIpv4(db.Model):
         return '<NetIpv4 id: {}, interface: {}, subnet_ipv4: {}, netmask: {}, \
                           default_gw: {}, broadcast: {}, ip_range_start: {}, \
                           ip_range_end: {}, dns_suffix: {}, dns_srv_01: {}, \
-                          dns_srv_02: {}, failover_peer: {}, vlan_num: {} >' \
+                          dns_srv_02: {}, failover_peer: {}, opt_242: {} >' \
                           .format(self.id, self.interface, self.subnet_ipv4, \
                                   self.netmask, self.default_gw, \
                                   self.broadcast, self.ip_range_start, \
                                   self.ip_range_end, self.dns_suffix, \
                                   self.dns_srv_01, self.dns_srv_02, \
-                                  self.failover_peer, self.vlan_num)
+                                  self.failover_peer, self.opt_242)
 
 class HostsAllow(db.Model):
     # список хостов, которые получают настройки по dhcp сервера

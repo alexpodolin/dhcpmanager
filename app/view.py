@@ -15,14 +15,11 @@ from forms import AddNetIpv4, AddAllowedHost, AddReservedIp, LoginForm
 # информация о сетевых интерфейсах
 import netifaces
 # подключим необходимые функции
-from custom_func import ssh_to_dhcp, create_subnet, create_hosts_allow, create_reserved_ip
+from custom_func import create_subnet, create_hosts_allow, create_reserved_ip
 # логин пользователя
 from flask_login import current_user, login_user, logout_user, login_required
 # для обработки @login_required
 from werkzeug.urls import url_parse
-
-import paramiko
-srv_list = ['nr-dhcp-01', 'nr-dhcp-02']
 
 # обращаемся к экземпляру класса flask и методу route
 @app.route('/', methods=['GET', 'POST'])
@@ -72,8 +69,8 @@ def index() -> 'html':
         dns_srv_01 = request.form['dns_prm']
         dns_srv_02 = request.form['dns_sec']
         failover_peer = request.form['failover_peer']
-        #opt_242 = request.form['opt_242']
-        vlan_num = request.form['vlan_num']
+        opt_242 = request.form['opt_242']
+        #vlan_num = request.form['vlan_num']
         
         try:
             # имя_столбца_в_БД(как в model.py) = имя_переменной 
@@ -83,13 +80,13 @@ def index() -> 'html':
                                  ip_range_start=ip_range_start, \
                                  ip_range_end=ip_range_end, dns_suffix=dns_sfx, \
                                  dns_srv_01=dns_srv_01, dns_srv_02=dns_srv_02, \
-                                 failover_peer=failover_peer, vlan_num=vlan_num)            
+                                 failover_peer=failover_peer, opt_242=opt_242)            
             db.session.add(add_subnet)
             db.session.commit()
             # соединимся с сервером 
             # создадим dhcpd конфиг при добавлении новой записи в БД
             create_subnet()
-            ssh_to_dhcp()  
+            #ssh_to_dhcp()  
 
         except:
             print('Добавление сети завершилось неудачей')    
@@ -125,7 +122,7 @@ def hosts_allow() -> 'html':
             db.session.commit()
             
             create_hosts_allow()
-            ssh_to_dhcp()            
+            #ssh_to_dhcp()            
             
             
         except:
@@ -154,7 +151,7 @@ def reserved_ip() -> 'html':
             db.session.commit()
             
             create_reserved_ip()
-            ssh_to_dhcp()            
+            #ssh_to_dhcp()            
             
             
         except:

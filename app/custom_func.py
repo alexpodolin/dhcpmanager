@@ -15,6 +15,7 @@ from models import NetIpv4, HostsAllow, ReservedIpv4
 def create_subnet():     
     # где лежит конфиг
     conf_dir = '/etc/dhcp/conf.d' 
+    #conf_dir = 'C:\\Users\\podolin\\Desktop\\conf.d'
     # имя конф. файла
     conf_path = os.path.join(conf_dir, 'subnets.conf')
     # имя бэкап файла конфига
@@ -38,7 +39,7 @@ def create_subnet():
             result.write('  option domain-name\t\t' + '"' + item.dns_suffix + '"' + ';' + '\n')
             result.write('  option domain-name-servers\t' + item.dns_srv_01 + ', ' + item.dns_srv_02 + ';' + '\n')
             
-            result.write('  option avaya-242\t\t' + '"' + 'MCIPADD=10.16.233.30,MCPORT=1719,TLSSRVR=10.16.233.23,HTTPSRVR=10.16.233.23,L2Q=1,L2QVLAN=' + item.vlan_num + ',VLANTEST=0' + '";' + '\n\n')
+            result.write('  option avaya-242\t\t' + '"' + item.opt_242 + '";' + '\n\n')
             result.write('  pool {' + '\n')
             result.write('    deny\t\tunknown-clients;' + '\n')
             result.write('    range\t\t' + item.ip_range_start + ' ' + item.ip_range_end + ';' + '\n')
@@ -46,12 +47,22 @@ def create_subnet():
             result.write('  }' + '\n')
             result.write('}' + '\n\n')
         result.close() 
+
     # Перезапустим dhcp сервис
     retcode = subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True) 
     # Если сервис перезапущен успешно, то завершим работу и удалим .bkp файл
     # если нет, то будем использовать старый конфиг
     if retcode == 0:
         os.remove(conf_path_bkp)
+        
+        # Cоздаем объект ssh класса SSHClient
+        ssh = paramiko.SSHClient()
+        # Для автоматизации принятия ключа в paramiko
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # подключение
+        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        ssh.connect('nr-dhcp-02', username='root', key_filename='/root/.ssh/id_rsa')
+        stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd') 
     else:
         shutil.copy2(conf_path_bkp, conf_path)
         subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True)
@@ -60,6 +71,7 @@ def create_subnet():
 # создание конфига списка разрешенных хостов
 def create_hosts_allow():     
     conf_dir = '/etc/dhcp/conf.d' 
+    #conf_dir = 'C:\\Users\\podolin\\Desktop\\conf.d' 
     conf_path = os.path.join(conf_dir, 'hosts_allow.conf')
     conf_path_bkp = os.path.join(conf_dir, 'hosts_allow.conf.bkp')
     if not os.path.exists(conf_dir): 
@@ -70,17 +82,28 @@ def create_hosts_allow():
         for item in items:
             result.write('host ' + item.hostname + ' { hardware ethernet ' + item.mac_addr + '; }' + '\n')
         result.close() 
+
     retcode = subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True) 
     if retcode == 0:
         os.remove(conf_path_bkp)
+        
+        # Cоздаем объект ssh класса SSHClient
+        ssh = paramiko.SSHClient()
+        # Для автоматизации принятия ключа в paramiko
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # подключение
+        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        ssh.connect('nr-dhcp-02', username='root', key_filename='/root/.ssh/id_rsa')
+        stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd')         
     else:
         shutil.copy2(conf_path_bkp, conf_path)
         subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True)
         os.remove(conf_path_bkp)
-        
+    
 # создание конфига резервирования ip адреса
 def create_reserved_ip():
     conf_dir = '/etc/dhcp/conf.d' 
+    #conf_dir = 'C:\\Users\\podolin\\Desktop\\conf.d' 
     conf_path = os.path.join(conf_dir, 'reserved_addr.conf')
     conf_path_bkp = os.path.join(conf_dir, 'reserved_addr.conf.bkp')
     if not os.path.exists(conf_dir): 
@@ -94,14 +117,25 @@ def create_reserved_ip():
             result.write('    fixed-address ' + item.res_ipv4 + ';' + '\n')
             result.write('}' + '\n\n')
         result.close()
+    
     retcode = subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True)
     if retcode == 0:
         os.remove(conf_path_bkp)
+        
+        # Cоздаем объект ssh класса SSHClient
+        ssh = paramiko.SSHClient()
+        # Для автоматизации принятия ключа в paramiko
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # подключение
+        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        ssh.connect('nr-dhcp-02', username='root', key_filename='/root/.ssh/id_rsa')
+        stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd')        
     else:
         shutil.copy2(conf_path_bkp, conf_path)
         subprocess.call('/usr/bin/systemctl restart dhcpd', shell=True)
         os.remove(conf_path_bkp)
-
+    
+'''
 # соединимся с двумя dhcp серверами
 def ssh_to_dhcp():
     srv_list = ['nr-dhcp-01', 'nr-dhcp-02']
@@ -115,4 +149,4 @@ def ssh_to_dhcp():
         ssh.connect(srv, username='root', key_filename='/root/.ssh/id_rsa')
         stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
         stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd')
-
+'''
