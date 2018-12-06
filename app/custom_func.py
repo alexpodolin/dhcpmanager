@@ -60,7 +60,7 @@ def create_subnet():
         # Для автоматизации принятия ключа в paramiko
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # подключение
-        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        os.system('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
         ssh.connect('nr-dhcp-02', username='root', key_filename='/root/.ssh/id_rsa')
         stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd') 
     else:
@@ -92,7 +92,7 @@ def create_hosts_allow():
         # Для автоматизации принятия ключа в paramiko
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # подключение
-        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        os.system('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
         ssh.connect('nr-dhcp-02', username='root', key_filename='/root/.ssh/id_rsa')
         stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd')         
     else:
@@ -127,7 +127,7 @@ def create_reserved_ip():
         # Для автоматизации принятия ключа в paramiko
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         # подключение
-        stdin, stdout, stderr = ssh.exec_command('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
+        os.system('/usr/bin/scp /etc/dhcp/conf.d/*.conf root@nr-dhcp-02:/etc/dhcp/conf.d/')
         ssh.connect('nr-dhcp-02', username='root', key_filename='/root/.ssh/id_rsa')
         stdin, stdout, stderr = ssh.exec_command('systemctl restart dhcpd')        
     else:
